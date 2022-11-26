@@ -13,10 +13,36 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\tests">
+      <UniqueIdentifier>{13174262-745e-4ae4-82cd-e5585802f96b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\..\..\Desktop\work\סמסטר א\פרויקט תוכנה\tests\test_readme.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="..\..\..\..\..\Desktop\work\סמסטר א\פרויקט תוכנה\tests\input_1.txt">
+      <Filter>Source Files\tests</Filter>
+    </Text>
+    <Text Include="..\..\..\..\..\Desktop\work\סמסטר א\פרויקט תוכנה\tests\input_2.txt">
+      <Filter>Source Files\tests</Filter>
+    </Text>
+    <Text Include="..\..\..\..\..\Desktop\work\סמסטר א\פרויקט תוכנה\tests\input_3.txt">
+      <Filter>Source Files\tests</Filter>
+    </Text>
+    <Text Include="..\..\..\..\..\Desktop\work\סמסטר א\פרויקט תוכנה\tests\output_1.txt">
+      <Filter>Source Files\tests</Filter>
+    </Text>
+    <Text Include="..\..\..\..\..\Desktop\work\סמסטר א\פרויקט תוכנה\tests\output_2.txt">
+      <Filter>Source Files\tests</Filter>
+    </Text>
+    <Text Include="..\..\..\..\..\Desktop\work\סמסטר א\פרויקט תוכנה\tests\output_3.txt">
+      <Filter>Source Files\tests</Filter>
+    </Text>
   </ItemGroup>
 </Project>

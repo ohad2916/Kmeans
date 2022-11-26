@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define ITER 200
-#define Convergence_VALUE 10
+#define ITER 600
+#define Convergence_VALUE 0.001
 
 double euc_d(double* p, double* q,size_t dim) { 
 	double d_sqrd_sum = 0;
@@ -81,6 +81,7 @@ int main(int argc, char **argv) {
 	for (size_t i = 0; i < K; i++)
 	{
 		cluster_mean[i][d] = 1;
+		cluster_mean[i][d+1] = 0;
 	}
 	//main algorithem
 	double** curr_X = data;
@@ -104,7 +105,8 @@ int main(int argc, char **argv) {
 		//update centeroid
 		double* curr_cluster = malloc(sizeof(double) * d);
 		double* min_cluster = cluster_mean[min_cluster_index];
-		memcpy(curr_cluster, min_cluster,d);
+		memcpy(curr_cluster, min_cluster, sizeof(double) * d);
+		
 		for (int j = 0; j < d; j++)
 		{		
 			double cluster_size = min_cluster[d];
@@ -112,24 +114,32 @@ int main(int argc, char **argv) {
 			min_cluster[j] += (curr_X[i][j]);
 			min_cluster[j] /= (cluster_size + 1);
 		}
+		
 		double curr_Muk = euc_d(curr_cluster, min_cluster, d);
 		min_cluster[d + 1] = curr_Muk;
-		double max_Duk = cluster_mean[0][d+1];
+
+		double max_Duk = cluster_mean[1][d+1];
 		for (size_t m = 0; m < K; m++)
 		{
 			max_Duk = max(max_Duk, cluster_mean[m][d + 1]);
 		}
 		cluster_mean[min_cluster_index][d]++;
-		i++;
+		
 		if (max_Duk < Convergence_VALUE)
 			printf("Converged!\n");
-		if (i%K == 0)
+
+		/*
+		if (i % 100 == 0)
 		{
-			for (int m = 0; m < K;m++) {
-				printf("%f\n", cluster_mean[m][d + 1]);
+			printf("min ");
+			for (int s = 0; s < d + 2; s++)
+			{
+				printf("%f ", min_cluster[s]);
 			}
-			printf("------\n");
-		}
+			printf("\nmaxduk, %f\n", max_Duk);
+		} */
+	
+		i++;
 	}
 
 	printf("#datapoints recieved: %d\nof dimension:%d\n", N,d);
