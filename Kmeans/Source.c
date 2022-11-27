@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define ITER 600
+
+#define DEFAULT_ITER 200
 #define Convergence_VALUE 0.001
 
 double euc_d(double* p, double* q,size_t dim) { 
@@ -16,16 +17,24 @@ double euc_d(double* p, double* q,size_t dim) {
 
 int main(int argc, char **argv) {
 	//input validation
-	if (argc != 3){
-		printf("Invalid number of CL-Arguments: %d\nPlease run the program in the following format:\n$./kmeans {N} {ITER} <{input_data.txt}", argc);
+	if (argc <  2) {
+		printf("Invalid number of CL-Arguments: %d\nPlease run the program in the following format:\n$./kmeans {N} {ITER} <{input_data.txt}, ITER is optional!,Default value set to 200.", argc);
 		return 1;
 	}
 	int	K = atoi(*(argv+1)); // validate later
-	int iter = atoi(*(argv + 2)); //validate later
+	int iter;
+	if (argc == 3)
+		iter = atoi(*(argv + 2));
+	else
+		iter = DEFAULT_ITER;
+	if (iter >= 1000) {
+		printf("Invalid maximum iteration!");
+		return 1;
+	}
 	int N = 1;
 	int d = 1;
 	
-	//load file, calculate N, d
+	//load file, calculate N, d. can be Optimized.
 	char ch;
 	int size = 0;
 	char* input_data = malloc(sizeof(char)+1);
@@ -35,13 +44,18 @@ int main(int argc, char **argv) {
 		if (!(input_data = realloc(input_data, sizeof(char) * size + 1))) return 1;
 		N += (ch == '\n');
 	}
+	//inputted K validation
+	if (K >= N) {
+		printf("Invalid number of clusters!");
+		return 1;
+	}
 	input_data[size] = '\0';
 	int i = 0;
 	while (input_data[i] != '\n') {
 		d += input_data[i] == ',';
 		i++;
 	}
-	// convert loaded string to a double array
+	//convert loaded string to a double array
 	double** data = malloc(sizeof(double*)*N);
 	double* p;
 	p = (double*)calloc(N * d, sizeof(double));
@@ -87,7 +101,7 @@ int main(int argc, char **argv) {
 	double** curr_X = data;
 	curr_X += K;
 	i = 0;
-	while (i < ITER && i < N)
+	while (i < iter)
 	{	
 
 		int min_cluster_index = 0;
@@ -110,10 +124,12 @@ int main(int argc, char **argv) {
 		for (int j = 0; j < d; j++)
 		{		
 			double cluster_size = min_cluster[d];
-			min_cluster[j] *= (cluster_size);
+			/*min_cluster[j] *= (cluster_size);
 			min_cluster[j] += (curr_X[i][j]);
-			min_cluster[j] /= (cluster_size + 1);
+			min_cluster[j] /= (cluster_size + 1);*/
+			min_cluster[j] = min_cluster[j]/ (cluster_size + 1) * cluster_size + curr_X[i][j] / (cluster_size + 1);
 		}
+		min_cluster[d]++;
 		
 		double curr_Muk = euc_d(curr_cluster, min_cluster, d);
 		min_cluster[d + 1] = curr_Muk;
@@ -123,7 +139,6 @@ int main(int argc, char **argv) {
 		{
 			max_Duk = max(max_Duk, cluster_mean[m][d + 1]);
 		}
-		cluster_mean[min_cluster_index][d]++;
 		
 		if (max_Duk < Convergence_VALUE)
 			printf("Converged!\n");
@@ -142,7 +157,8 @@ int main(int argc, char **argv) {
 		i++;
 	}
 
-	printf("#datapoints recieved: %d\nof dimension:%d\n", N,d);
+	printf("#datapoints recieved: %d of dimension:%d\n", N,d);
+	printf("Iterating %d times over %d clusters\n", iter, K);
 
 	for (size_t m = 0; m < K; m++)
 	{
