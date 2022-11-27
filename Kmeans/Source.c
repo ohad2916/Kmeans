@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
 		min_value = INT_MAX;
 		for (j = 0; j < K; j++)
 		{
-			curr_euc_d = euc_d(cluster_mean[j], *(curr_X + i), d);
+			curr_euc_d = euc_d(cluster_mean[j], *(curr_X + i % (N-K)), d);
 			if (curr_euc_d < min_value)
 			{
 				min_value = curr_euc_d;
@@ -144,7 +144,7 @@ int main(int argc, char** argv) {
 			/*min_cluster[js] *= (cluster_size);
 			min_cluster[j] += (curr_X[i][j]);
 			min_cluster[j] /= (cluster_size + 1);*/
-			min_cluster[j] = min_cluster[j] / (cluster_size + 1) * cluster_size + curr_X[i][j] / (cluster_size + 1);
+			min_cluster[j] = min_cluster[j] / (cluster_size + 1) * cluster_size + curr_X[i%(N-K)][j] / (cluster_size + 1);
 		}
 		min_cluster[d]++;
 
