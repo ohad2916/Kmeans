@@ -158,8 +158,10 @@ int main(int argc, char** argv) {
 				max_Duk = cluster_mean[m][d + 1];
 		}
 
-		if (max_Duk < Convergence_VALUE)
+		if (max_Duk < Convergence_VALUE) {
 			printf("Converged!\n");
+			break;
+		}
 
 		/*
 		if (i % 100 == 0)
