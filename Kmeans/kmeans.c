@@ -18,7 +18,7 @@ double euc_d(double* p, double* q, size_t dim) {
 }
 
 int main(int argc, char** argv) {
-	size_t j, m, i, N,l, K, iter, d, size;
+	size_t j, m, i, N, K, iter, d, size;
 	char ch;
 	char* input_data;
 	double** data;
@@ -35,7 +35,6 @@ int main(int argc, char** argv) {
 	double cluster_size;
 	double curr_Muk;
 	double max_Duk;
-	size_t* mincluster_index;
 	N = 1;
 	d = 1;
 	size = 0;
