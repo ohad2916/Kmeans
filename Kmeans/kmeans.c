@@ -18,23 +18,24 @@ double euc_d(double* p, double* q, size_t dim) {
 }
 
 int main(int argc, char** argv) {
-	size_t j, m, i, N, K, iter, d, size;
+	size_t j, m, i, N,l, K, iter, d, size;
 	char ch;
 	char* input_data;
 	double** data;
 	double* p;
 	char* end_ptr;
 	char* begin_ptr;
-	double* b;
+	double* b,*c;
 	double** cluster_mean;
 	double** curr_X;
 	size_t min_cluster_index;
 	double min_value, curr_euc_d;
-	double* curr_cluster;
+	double** curr_clusters;
 	double* min_cluster;
 	double cluster_size;
 	double curr_Muk;
 	double max_Duk;
+	size_t* mincluster_index;
 	N = 1;
 	d = 1;
 	size = 0;
@@ -93,13 +94,13 @@ int main(int argc, char** argv) {
 			begin_ptr = ++end_ptr;
 		}
 	}
-	/*free(input_data);*/
+	free(input_data);
 	/*end convert
 	initialize clusters*/
-	b = calloc(K * (d + 2), sizeof(double));
+	b = calloc(K * (d + 1), sizeof(double));
 	cluster_mean = malloc(K * sizeof(double*));
 	for (i = 0; i < K; i++) {
-		cluster_mean[i] = b + i * (d + 2);
+		cluster_mean[i] = b + i * (d + 1);
 	}
 
 	for (i = 0; i < K; i++)
@@ -116,63 +117,60 @@ int main(int argc, char** argv) {
 	}
 	/*main algorithem*/
 	curr_X = data;
-	curr_X += K;
 	i = 0;
-	while (i < iter)
-	{
+	/*allocate temporary clusters to decide convergence*/
+	c = calloc(K * (d + 2), sizeof(double));
+	curr_clusters = malloc(K * sizeof(double*));
+	for (i = 0; i < K; i++) {
+		curr_clusters[i] = c + i * (d + 2);
+	}
 
-		min_cluster_index = 0;
-		/*decide closest cluster*/
-		min_value = INT_MAX;
+	while (i < iter)
+	{	
+		/*copy current clusters to decide against.*/
 		for (j = 0; j < K; j++)
 		{
-			curr_euc_d = euc_d(cluster_mean[j], *(curr_X + i % (N-K)), d);
-			if (curr_euc_d < min_value)
+			for (m = 0; m < d + 2; m++)
 			{
-				min_value = curr_euc_d;
-				min_cluster_index = j;
+				curr_clusters[j][m] = cluster_mean[j][m];
 			}
 		}
-		/*update centeroid*/
-		curr_cluster = malloc(sizeof(double) * d);
-		min_cluster = cluster_mean[min_cluster_index];
-		memcpy(curr_cluster, min_cluster, sizeof(double) * d);
-
-		for (j = 0; j < d; j++)
-		{
-			cluster_size = min_cluster[d];
-			/*min_cluster[js] *= (cluster_size);
-			min_cluster[j] += (curr_X[i][j]);
-			min_cluster[j] /= (cluster_size + 1);*/
-			min_cluster[j] = min_cluster[j] / (cluster_size + 1) * cluster_size + curr_X[i%(N-K)][j] / (cluster_size + 1);
+		/*decide closest cluster against the copy and update it with new Xi*/
+		for (m = 0; m < N ; m++) {
+			min_cluster_index = 0;
+			min_value = INT_MAX;
+			for (j = 0; j < K; j++)
+			{
+				curr_euc_d = euc_d(curr_clusters[j], *(curr_X + m), d);
+				if (curr_euc_d < min_value)
+				{
+					min_value = curr_euc_d;
+					min_cluster_index = j;
+				}
+			}
+			/*updating real one*/
+			min_cluster = cluster_mean[min_cluster_index];
+			for (j = 0; j < d; j++)
+			{
+				cluster_size = min_cluster[d];
+				/*min_cluster[js] *= (cluster_size);
+				min_cluster[j] += (curr_X[i][j]);
+				min_cluster[j] /= (cluster_size + 1);*/
+				min_cluster[j] = min_cluster[j] / (cluster_size + 1) * cluster_size + curr_X[m][j] / (cluster_size + 1);
+			}
+			min_cluster[d]++;
 		}
-		min_cluster[d]++;
 
-		curr_Muk = euc_d(curr_cluster, min_cluster, d);
-		min_cluster[d + 1] = curr_Muk;
-
-		max_Duk = cluster_mean[1][d + 1];
-		for (m = 0; m < K; m++)
-		{
-			if (cluster_mean[m][d + 1] > max_Duk)
-				max_Duk = cluster_mean[m][d + 1];
+		/*decide convegerence*/
+		max_Duk = 0;
+		for (j = 0; j < K; j++) {
+			curr_Muk = euc_d(cluster_mean[j], curr_clusters[j], d);
+			if (curr_Muk > max_Duk)
+				max_Duk = curr_Muk;
 		}
-
-		if (max_Duk < Convergence_VALUE) {
-			printf("Converged!\n");
+		if (max_Duk <= Convergence_VALUE) {
 			break;
 		}
-
-		/*
-		if (i % 100 == 0)
-		{
-			printf("min ");
-			for (int s = 0; s < d + 2; s++)
-			{
-				printf("%f ", min_cluster[s]);
-			}
-			printf("\nmaxduk, %f\n", max_Duk);
-		} */
 
 		i++;
 	}
@@ -188,6 +186,8 @@ int main(int argc, char** argv) {
 		}
 		printf("\n");
 	}
+	free(b);
+	free(c);
 
 	return 1;
 }
