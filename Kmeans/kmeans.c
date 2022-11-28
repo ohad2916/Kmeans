@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>
+
 
 #define DEFAULT_ITER 200
 #define Convergence_VALUE 0.001
@@ -109,11 +109,10 @@ int main(int argc, char** argv) {
 			cluster_mean[i][j] = data[i][j];
 		}
 	}
-	for (i = 0; i < K; i++)
+	/*for (i = 0; i < K; i++)
 	{
 		cluster_mean[i][d] = 1;
-		cluster_mean[i][d + 1] = 0;
-	}
+	}*/
 	/*main algorithem*/
 	curr_X = data;
 	i = 0;
@@ -124,12 +123,16 @@ int main(int argc, char** argv) {
 		curr_clusters[i] = c + i * (d + 2);
 	}
 
+	printf("#datapoints recieved: %lu of dimension:%lu\n", (unsigned long)N, (unsigned long)d);
+	printf("Iterating %lu times over %lu clusters\n", (unsigned long)iter, (unsigned long)K);
+	
+	i = 0;
 	while (i < iter)
 	{	
 		/*copy current clusters to decide against.*/
 		for (j = 0; j < K; j++)
 		{
-			for (m = 0; m < d + 2; m++)
+			for (m = 0; m < d + 1; m++)
 			{
 				curr_clusters[j][m] = cluster_mean[j][m];
 			}
@@ -149,13 +152,13 @@ int main(int argc, char** argv) {
 			}
 			/*updating real one*/
 			min_cluster = cluster_mean[min_cluster_index];
+			cluster_size = min_cluster[d];
 			for (j = 0; j < d; j++)
 			{
-				cluster_size = min_cluster[d];
 				/*min_cluster[js] *= (cluster_size);
 				min_cluster[j] += (curr_X[i][j]);
 				min_cluster[j] /= (cluster_size + 1);*/
-				min_cluster[j] = min_cluster[j] / (cluster_size + 1) * cluster_size + curr_X[m][j] / (cluster_size + 1);
+				min_cluster[j] = ((min_cluster[j] / (cluster_size + 1)) * cluster_size) + (curr_X[m][j] / (cluster_size + 1));
 			}
 			min_cluster[d]++;
 		}
@@ -168,14 +171,14 @@ int main(int argc, char** argv) {
 				max_Duk = curr_Muk;
 		}
 		if (max_Duk <= Convergence_VALUE) {
+			/*print statement for debugging*/
+			/*printf("Converged after: %d iterations\n", i +1);*/
 			break;
 		}
 
 		i++;
 	}
 
-	printf("#datapoints recieved: %lu of dimension:%lu\n", (unsigned long)N, (unsigned long)d);
-	printf("Iterating %lu times over %lu clusters\n", (unsigned long)iter, (unsigned long)K);
 
 	for (m = 0; m < K; m++)
 	{
