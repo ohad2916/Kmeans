@@ -117,10 +117,10 @@ int main(int argc, char** argv) {
 	curr_X = data;
 	i = 0;
 	/*allocate temporary clusters to decide convergence*/
-	c = calloc(K * (d + 2), sizeof(double));
+	c = calloc(K * (d + 1), sizeof(double));
 	curr_clusters = malloc(K * sizeof(double*));
 	for (i = 0; i < K; i++) {
-		curr_clusters[i] = c + i * (d + 2);
+		curr_clusters[i] = c + i * (d + 1);
 	}
 
 	printf("#datapoints recieved: %lu of dimension:%lu\n", (unsigned long)N, (unsigned long)d);
