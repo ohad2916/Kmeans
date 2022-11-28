@@ -1,0 +1,189 @@
+nova 11% gcc -ansi -Wall -Wextra -Werror -pedantic-errors Source.c -o kmeans > errors.txt
+Source.c: In function 'euc_d':
+Source.c:11:11: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+  while (i < dim) {
+           ^
+Source.c: In function 'main':
+Source.c:19:2: error: expected expression before '/' token
+  //input validation
+  ^
+Source.c:24:27: error: expected expression before '/' token
+  int K = atoi(*(argv+1)); // validate later
+                           ^
+Source.c:27:3: error: 'iter' undeclared (first use in this function)
+   iter = atoi(*(argv + 2));
+   ^
+Source.c:27:3: note: each undeclared identifier is reported only once for each function it appears in
+Source.c:34:2: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+  int N = 1;
+  ^
+Source.c:37:2: error: expected expression before '/' token
+  //load file, calculate N, d. can be Optimized.
+  ^
+Source.c:39:2: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+  int size = 0;
+  ^
+Source.c:41:10: error: 'ch' undeclared (first use in this function)
+  while ((ch = getchar()) != EOF) {
+          ^
+Source.c:47:2: error: expected expression before '/' token
+  //inputted K validation
+  ^
+Source.c:53:2: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+  int i = 0;
+  ^
+Source.c:58:2: error: expected expression before '/' token
+  //convert loaded string to a double array
+  ^
+Source.c:60:2: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+  double* p;
+  ^
+Source.c:62:14: error: conflicting types for 'i'
+  for (size_t i = 0; i < N; i++){
+              ^
+Source.c:53:6: note: previous definition of 'i' was here
+  int i = 0;
+      ^
+Source.c:62:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (size_t i = 0; i < N; i++){
+  ^
+Source.c:62:2: note: use option -std=c99 or -std=gnu99 to compile your code
+Source.c:62:23: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+  for (size_t i = 0; i < N; i++){
+                       ^
+Source.c:63:3: error: 'data' undeclared (first use in this function)
+   data[i] = p + i * d;
+   ^
+Source.c:65:2: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+  char* end_ptr = input_data;
+  ^
+Source.c:67:14: error: redefinition of 'i'
+  for (size_t i = 0; i < N; i++)
+              ^
+Source.c:62:14: note: previous definition of 'i' was here
+  for (size_t i = 0; i < N; i++){
+              ^
+Source.c:67:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (size_t i = 0; i < N; i++)
+  ^
+Source.c:67:23: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+  for (size_t i = 0; i < N; i++)
+                       ^
+Source.c:69:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (size_t j = 0; j < d; j++)
+   ^
+Source.c:69:24: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+   for (size_t j = 0; j < d; j++)
+                        ^
+Source.c:80:2: error: expected expression before '/' token
+  //end convert
+  ^
+Source.c:83:33: error: 'K' undeclared (first use in this function)
+  double** cluster_mean = malloc(K*sizeof(double*));
+                                 ^
+Source.c:83:2: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+  double** cluster_mean = malloc(K*sizeof(double*));
+  ^
+Source.c:84:14: error: redefinition of 'i'
+  for (size_t i = 0; i < K; i++){
+              ^
+Source.c:67:14: note: previous definition of 'i' was here
+  for (size_t i = 0; i < N; i++)
+              ^
+Source.c:84:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (size_t i = 0; i < K; i++){
+  ^
+Source.c:85:21: error: 'b' undeclared (first use in this function)
+   cluster_mean[i] = b + i * (d+2);
+                     ^
+Source.c:88:14: error: redefinition of 'i'
+  for (size_t i = 0; i < K; i++)
+              ^
+Source.c:84:14: note: previous definition of 'i' was here
+  for (size_t i = 0; i < K; i++){
+              ^
+Source.c:88:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (size_t i = 0; i < K; i++)
+  ^
+Source.c:90:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (size_t j = 0; j < d; j++)
+   ^
+Source.c:90:24: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+   for (size_t j = 0; j < d; j++)
+                        ^
+Source.c:95:14: error: redefinition of 'i'
+  for (size_t i = 0; i < K; i++)
+              ^
+Source.c:88:14: note: previous definition of 'i' was here
+  for (size_t i = 0; i < K; i++)
+              ^
+Source.c:95:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (size_t i = 0; i < K; i++)
+  ^
+Source.c:100:2: error: expected expression before '/' token
+  //main algorithem
+  ^
+Source.c:102:2: error: 'curr_X' undeclared (first use in this function)
+  curr_X += K;
+  ^
+Source.c:108:3: error: expected expression before '/' token
+   //decide closest cluster
+   ^
+Source.c:110:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (size_t j = 0; j < K; j++)
+   ^
+Source.c:113:21: error: 'min_value' undeclared (first use in this function)
+    if (curr_euc_d < min_value)
+                     ^
+Source.c:119:3: error: expected expression before '/' token
+   //update centeroid
+   ^
+Source.c:121:3: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+   double* min_cluster = cluster_mean[min_cluster_index];
+   ^
+Source.c:122:3: error: implicit declaration of function 'memcpy' [-Werror=implicit-function-declaration]
+   memcpy(curr_cluster, min_cluster, sizeof(double) * d);
+   ^
+Source.c:122:3: error: incompatible implicit declaration of built-in function 'memcpy' [-Werror]
+Source.c:122:10: error: 'curr_cluster' undeclared (first use in this function)
+   memcpy(curr_cluster, min_cluster, sizeof(double) * d);
+          ^
+Source.c:124:12: error: conflicting types for 'j'
+   for (int j = 0; j < d; j++)
+            ^
+Source.c:110:15: note: previous definition of 'j' was here
+   for (size_t j = 0; j < K; j++)
+               ^
+Source.c:124:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (int j = 0; j < d; j++)
+   ^
+Source.c:134:3: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+   double curr_Muk = euc_d(curr_cluster, min_cluster, d);
+   ^
+Source.c:137:3: error: ISO C90 forbids mixed declarations and code [-Wpedantic]
+   double max_Duk = cluster_mean[1][d+1];
+   ^
+Source.c:138:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (size_t m = 0; m < K; m++)
+   ^
+Source.c:140:4: error: implicit declaration of function 'max' [-Werror=implicit-function-declaration]
+    max_Duk = max(max_Duk, cluster_mean[m][d + 1]);
+    ^
+Source.c:163:2: error: 'for' loop initial declarations are only allowed in C99 mode
+  for (size_t m = 0; m < K; m++)
+  ^
+Source.c:165:3: error: 'for' loop initial declarations are only allowed in C99 mode
+   for (size_t j = 0; j < d+1; j++)
+   ^
+Source.c:165:24: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+   for (size_t j = 0; j < d+1; j++)
+                        ^
+cc1: all warnings being treated as errors
+nova 12% errors.txt
+errors.txt: Permission denied.
+nova 13% exit
+logout
+Connection to nova.cs.tau.ac.il closed.
+
+ohada@DESKTOP-A7NB128 MINGW64 ~
+$
