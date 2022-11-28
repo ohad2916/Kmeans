@@ -20,7 +20,7 @@ double euc_d(double* p, double* q, size_t dim) {
 int main(int argc, char** argv) {
 	size_t j, m, i, N, K, iter, d, size;
 	char ch;
-	char* input_data;
+	char* input_data,*temp_input_data;
 	double** data;
 	double* p;
 	char* end_ptr;
@@ -55,11 +55,19 @@ int main(int argc, char** argv) {
 	}
 
 	/*load file, calculate N, d. can be Optimized.*/
-	input_data = malloc(sizeof(char) + 1);
+	input_data = NULL;
+	while(!input_data)
+		input_data = malloc(sizeof(char) + 1);
 	while ((ch = getchar()) != EOF) {
 		input_data[size] = (char)ch;
 		size++;
-		if (!(input_data = realloc(input_data, sizeof(char) * size + 1))) return 1;
+		temp_input_data = realloc(input_data, sizeof(char) * size + 1);
+		if (!temp_input_data) {
+			printf("Error allocating memory while loading file!");
+			return 1;
+		}
+		else
+			input_data = temp_input_data;
 		N += (ch == '\n');
 	}
 	/*inputted K validation*/
@@ -69,13 +77,17 @@ int main(int argc, char** argv) {
 	}
 	input_data[size] = '\0';
 	i = 0;
-	while (input_data[i] != '\n') {
+	while (i < size && input_data[i] != '\n') {
 		d += input_data[i] == ',';
 		i++;
 	}
 	/*convert loaded string to a double array*/
-	data = malloc(sizeof(double*) * N);
-	p = (double*)calloc(N * d, sizeof(double));
+	data = NULL;
+	while(!data)
+		data = calloc( N,sizeof(double*));
+	p = NULL;
+	while(!p)
+		p = (double*)calloc(N * d, sizeof(double));
 	for (i = 0; i < N; i++) {
 		data[i] = p + i * d;
 	}
