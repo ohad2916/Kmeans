@@ -25,12 +25,14 @@ int main(int argc, char** argv) {
 	double* p;
 	char* end_ptr;
 	char* begin_ptr;
-	double* b,*c;
+	double* b,*c,*e;
 	double** cluster_mean;
 	double** curr_X;
 	size_t min_cluster_index;
 	double min_value, curr_euc_d;
 	double** curr_clusters;
+	double** points_sum_to_add;
+	size_t no_points_add;
 	double* min_cluster;
 	double cluster_size;
 	double curr_Muk;
@@ -143,19 +145,26 @@ int main(int argc, char** argv) {
 	for (i = 0; i < K; i++) {
 		curr_clusters[i] = c + i * (d + 1);
 	}
-
+	/*allocating temporary sums array*/
+	e = calloc(K * (d + 1), sizeof(double));
+	points_sum_to_add = calloc(K, sizeof(double*));
+	for (j = 0;j < K;j++) {
+		points_sum_to_add[j] = e + j * (d + 1);
+	}
 	printf("#datapoints recieved: %lu of dimension:%lu\n", (unsigned long)N, (unsigned long)d);
 	printf("Iterating %lu times over %lu clusters\n", (unsigned long)iter, (unsigned long)K);
 	
 	i = 0;
 	while (i < iter)
 	{	
+		/*initializing sums array*/
 		/*copy current clusters to decide against.*/
 		for (j = 0; j < K; j++)
 		{
 			for (m = 0; m < d + 1; m++)
 			{
 				curr_clusters[j][m] = cluster_mean[j][m];
+				points_sum_to_add[j][m] = 0.0;
 			}
 		}
 		/*decide closest cluster against the copy and update it with new Xi*/
@@ -170,18 +179,36 @@ int main(int argc, char** argv) {
 					min_value = curr_euc_d;
 					min_cluster_index = j;
 				}
+
 			}
-			/*updating real one*/
-			min_cluster = cluster_mean[min_cluster_index];
+			/*updating real cluster*/
+
+			/*min_cluster = cluster_mean[min_cluster_index];
 			cluster_size = min_cluster[d];
 			for (j = 0; j < d; j++)
 			{
 				/*min_cluster[js] *= (cluster_size);
 				min_cluster[j] += (curr_X[i][j]);
-				min_cluster[j] /= (cluster_size + 1);*/
+				min_cluster[j] /= (cluster_size + 1);
 				min_cluster[j] = ((min_cluster[j] / (cluster_size + 1)) * cluster_size) + (curr_X[m][j] / (cluster_size + 1));
 			}
-			min_cluster[d]++;
+			min_cluster[d]++;*/
+
+			/*updating sums array*/
+			for (j = 0; j < d; j++) {
+				points_sum_to_add[min_cluster_index][j] += curr_X[m][j];
+			}
+			points_sum_to_add[min_cluster_index][d] += 1.0;
+
+		}
+		/*updating real clusters*/
+		for (j = 0; j < K; j++)
+		{
+			for (m = 0; m < d; m++)
+			{
+				cluster_mean[j][m] = ((cluster_mean[j][m] * cluster_mean[j][d]) + points_sum_to_add[j][m]) / (points_sum_to_add[j][d] + cluster_mean[j][d]);
+			}
+			cluster_mean[j][d] = cluster_mean[j][d] + points_sum_to_add[j][d];
 		}
 
 		/*decide convegerence*/
@@ -196,7 +223,6 @@ int main(int argc, char** argv) {
 			/*printf("Converged after: %d iterations\n", i +1);*/
 			break;
 		}
-
 		i++;
 	}
 
@@ -211,6 +237,7 @@ int main(int argc, char** argv) {
 	}
 	free(b);
 	free(c);
+	free(e);
 
 	return 1;
 }
