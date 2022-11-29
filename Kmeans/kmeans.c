@@ -18,7 +18,7 @@ double euc_d(double* p, double* q, size_t dim) {
 }
 
 int main(int argc, char** argv) {
-	size_t j, m, i, N, K, iter, d, size;
+	size_t j, m, i, N, K, iter, d, size,capacity;
 	char ch;
 	char* input_data,*temp_input_data;
 	double** data;
@@ -37,7 +37,6 @@ int main(int argc, char** argv) {
 	double max_Duk;
 	N = 1;
 	d = 1;
-	size = 0;
 
 	/*input validation*/
 	if (argc < 2) {
@@ -56,18 +55,23 @@ int main(int argc, char** argv) {
 
 	/*load file, calculate N, d. can be Optimized.*/
 	input_data = NULL;
+	size = 0;
+	capacity = 100;
 	while(!input_data)
-		input_data = malloc(sizeof(char) + 1);
+		input_data = calloc(capacity + 1,sizeof(char));
 	while ((ch = getchar()) != EOF) {
 		input_data[size] = (char)ch;
 		size++;
-		temp_input_data = realloc(input_data, sizeof(char) * size + 1);
-		if (!temp_input_data) {
-			printf("Error allocating memory while loading file!");
-			return 1;
+		if(size == capacity){
+			capacity += 100;
+			temp_input_data = realloc(input_data, sizeof(char) * capacity + 1);
+			if (!temp_input_data) {
+				printf("Error allocating memory while loading file!");
+				return 1;
+			}
+			else
+				input_data = temp_input_data;
 		}
-		else
-			input_data = temp_input_data;
 		N += (ch == '\n');
 	}
 	/*inputted K validation*/
@@ -109,7 +113,7 @@ int main(int argc, char** argv) {
 	/*end convert
 	initialize clusters*/
 	b = calloc(K * (d + 1), sizeof(double));
-	cluster_mean = malloc(K * sizeof(double*));
+	cluster_mean = calloc(K , sizeof(double*));
 	for (i = 0; i < K; i++) {
 		cluster_mean[i] = b + i * (d + 1);
 	}
@@ -130,7 +134,7 @@ int main(int argc, char** argv) {
 	i = 0;
 	/*allocate temporary clusters to decide convergence*/
 	c = calloc(K * (d + 1), sizeof(double));
-	curr_clusters = malloc(K * sizeof(double*));
+	curr_clusters = calloc(K , sizeof(double*));
 	for (i = 0; i < K; i++) {
 		curr_clusters[i] = c + i * (d + 1);
 	}
