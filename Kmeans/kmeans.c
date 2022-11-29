@@ -95,8 +95,8 @@ int main(int argc, char** argv) {
 	for (i = 0; i < N; i++) {
 		data[i] = p + i * d;
 	}
-	begin_ptr = input_data;
-	end_ptr = begin_ptr;
+	begin_ptr = &input_data[0];
+	end_ptr = &begin_ptr[0];
 	for (i = 0; i < N; i++)
 	{
 		for (j = 0; j < d; j++)
