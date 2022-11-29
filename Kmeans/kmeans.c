@@ -211,6 +211,10 @@ int main(int argc, char** argv) {
 	}
 	free(b);
 	free(c);
+	free(p);
+	free(curr_clusters);
+	free(cluster_mean);
+	free(data);
 
 	return 1;
 }
