@@ -95,18 +95,23 @@ int main(int argc, char** argv) {
 	for (i = 0; i < N; i++) {
 		data[i] = p + i * d;
 	}
-	end_ptr = input_data;
 	begin_ptr = input_data;
+	end_ptr = begin_ptr;
 	for (i = 0; i < N; i++)
 	{
 		for (j = 0; j < d; j++)
 		{
-			while (*end_ptr != ',' && *end_ptr != '\n') {
+			/*while (*end_ptr != ',' && *end_ptr != '\n') {
 				end_ptr++;
 			}
 
 			data[i][j] = strtod(begin_ptr, &end_ptr);
-			begin_ptr = ++end_ptr;
+			begin_ptr = ++end_ptr;*/
+			if (*end_ptr == '\0')
+				break;
+			else
+				begin_ptr = end_ptr + 1;
+			data[i][j] = strtod(begin_ptr, &end_ptr);
 		}
 	}
 	free(input_data);
