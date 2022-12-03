@@ -92,7 +92,7 @@ while curr_iter < iter_ and convergence > epsilon:
 
     curr_iter += 1
 
-print(f"final iter: {curr_iter}")
+#print(f"final iter: {curr_iter}")
 for cent in centroids:
     print(cent)
 
