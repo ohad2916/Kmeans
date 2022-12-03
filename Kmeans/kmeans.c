@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 
 	/*input validation*/
 	if (argc < 2) {
-		printf("Invalid number of CL-Arguments: %d\nPlease run the program in the following format:\n$./kmeans {N} {ITER} <{input_data.txt}, ITER is optional!,Default value set to 200.\n", argc);
+		printf("Invalid number of cmd_line_Arguments: %d\nPlease run the program in the following format:\n$./kmeans {N} {ITER} <{input_data.txt}, ITER is optional!,Default value set to 200.\n", argc);
 		return 1;
 	}
 	K = atoi(*(argv + 1)); /*validate later*/
@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
 			capacity += 100;
 			temp_input_data = realloc(input_data, sizeof(char) * capacity + 1);
 			if (!temp_input_data) {
-				printf("Error allocating memory while loading file!");
+				printf("An Error Has Occurred");
 				return 1;
 			}
 			else
@@ -101,12 +101,6 @@ int main(int argc, char** argv) {
 	{
 		for (j = 0; j < d; j++)
 		{
-			/*while (*end_ptr != ',' && *end_ptr != '\n') {
-				end_ptr++;
-			}
-
-			data[i][j] = strtod(begin_ptr, &end_ptr);
-			begin_ptr = ++end_ptr;*/
 			if (*end_ptr == '\0')
 				break;
 			else
@@ -144,8 +138,8 @@ int main(int argc, char** argv) {
 		curr_clusters[i] = c + i * (d + 1);
 	}
 
-	printf("#datapoints recieved: %lu of dimension:%lu\n", (unsigned long)N, (unsigned long)d);
-	printf("Iterating %lu times over %lu clusters\n", (unsigned long)iter, (unsigned long)K);
+	/*printf("#datapoints recieved: %lu of dimension:%lu\n", (unsigned long)N, (unsigned long)d);
+	printf("Iterating %lu times over %lu clusters\n", (unsigned long)iter, (unsigned long)K);*/
 	
 	i = 0;
 	while (i < iter)
@@ -203,9 +197,11 @@ int main(int argc, char** argv) {
 
 	for (m = 0; m < K; m++)
 	{
-		for (j = 0; j < d + 1; j++)
+		for (j = 0; j < d; j++)
 		{
-			printf("%f, ", cluster_mean[m][j]);
+			printf("%.4f ", cluster_mean[m][j]);
+			if (j < d - 1)
+				printf(",");
 		}
 		printf("\n");
 	}
@@ -216,5 +212,5 @@ int main(int argc, char** argv) {
 	free(cluster_mean);
 	free(data);
 
-	return 1;
+	return 0;
 }
