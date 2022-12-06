@@ -1,15 +1,20 @@
 import sys
 
-# total arguments
-arg_c = len(sys.argv)
+try:
+    # total arguments
+    arg_c = len(sys.argv)
 
-k = int(sys.argv[1])
-iter_ = 200
-epsilon = 0.001
-input_data_name = sys.argv[-1]
+    k = int(sys.argv[1])
+    iter_ = 200
+    epsilon = 0.001
+    input_data_name = sys.argv[-1]
 
-if arg_c == 4:
-    iter_ = int(sys.argv[2])
+    if arg_c == 4:
+        iter_ = int(sys.argv[2])
+except:
+    print("An error has Occurred")
+    sys.exit()
+
 
 if arg_c > 4 or arg_c < 2:
     print("An Error has Occurred")
@@ -78,7 +83,7 @@ while curr_iter < iter_ and convergence > epsilon:
     for n in range(k):
         cluster_size = centroids_sizes[n] + addition_centroids_sizes[n]
         for m in range(dimension):
-            if(cluster_size > 0):
+            if cluster_size > 0:
                 centroids[n][m] = (centroids[n][m] * centroids_sizes[n] + addition_centroids[n][m]) / cluster_size
         centroids_sizes[n] = cluster_size
 
@@ -92,9 +97,9 @@ while curr_iter < iter_ and convergence > epsilon:
 
     curr_iter += 1
 
-#print(f"final iter: {curr_iter}")
+# print(f"final iter: {curr_iter}")
 for cent in centroids:
-    print(cent)
+    print(*cent, sep=',')
 
 
 
