@@ -47,8 +47,8 @@ int main(int argc, char** argv) {
 	double curr_Muk;
 	double max_Duk;
 	N = 1;
-	data = p = b = c = cluster_mean = curr_clusters = NULL;
 	d = 1;
+	data = NULL; p = NULL; b = NULL; c = NULL; cluster_mean = NULL; curr_clusters = NULL;
 
 	/*input validation*/
 	if (argc < 2) {
