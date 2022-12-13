@@ -17,6 +17,17 @@ double euc_d(double* p, double* q, size_t dim) {
 	return sqrt(d_sqrd_sum);
 }
 
+int free_memory(double* a, double* b, double* c, double** data, double** mean, double** curr) {
+	free(a);
+	free(b);
+	free(c);
+	free(data);
+	free(mean);
+	free(curr);
+	return 0;
+}
+
+
 int main(int argc, char** argv) {
 	size_t j, m, i, N, K, iter, d, size,capacity;
 	char ch;
@@ -37,6 +48,7 @@ int main(int argc, char** argv) {
 	double max_Duk;
 	N = 1;
 	d = 1;
+	data = NULL; p = NULL; b = NULL; c = NULL; cluster_mean = NULL; curr_clusters = NULL;
 
 	/*input validation*/
 	if (argc < 2) {
@@ -57,8 +69,12 @@ int main(int argc, char** argv) {
 	input_data = NULL;
 	size = 0;
 	capacity = 100;
-	while(!input_data)
-		input_data = calloc(capacity + 1,sizeof(char));
+	input_data = calloc(capacity + 1,sizeof(char));
+	if (!input_data){
+		printf("An Error Has Occurred");
+		free_memory(b, c, p, curr_clusters, cluster_mean, data);
+		return 1;
+	}
 	while ((ch = getchar()) != EOF) {
 		input_data[size] = (char)ch;
 		size++;
@@ -67,6 +83,7 @@ int main(int argc, char** argv) {
 			temp_input_data = realloc(input_data, sizeof(char) * capacity + 1);
 			if (!temp_input_data) {
 				printf("An Error Has Occurred");
+				free_memory(b, c, p, curr_clusters, cluster_mean, data);
 				return 1;
 			}
 			else
@@ -87,11 +104,19 @@ int main(int argc, char** argv) {
 	}
 	/*convert loaded string to a double array*/
 	data = NULL;
-	while(!data)
-		data = calloc( N,sizeof(double*));
+	data = calloc( N,sizeof(double*));
+	if (!data) {
+		printf("An Error Has Occurred");
+		free_memory(b, c, p, curr_clusters, cluster_mean, data);
+		return 1;
+	}
 	p = NULL;
-	while(!p)
-		p = (double*)calloc(N * d, sizeof(double));
+	p = (double*)calloc(N * d, sizeof(double));
+	if (!p){
+		printf("An Error Has Occurred");
+		free_memory(b, c, p, curr_clusters, cluster_mean, data);
+		return 1;
+	}
 	for (i = 0; i < N; i++) {
 		data[i] = p + i * d;
 	}
@@ -113,6 +138,11 @@ int main(int argc, char** argv) {
 	initialize clusters*/
 	b = calloc(K * (d + 1), sizeof(double));
 	cluster_mean = calloc(K , sizeof(double*));
+	if (!b || !cluster_mean){
+		printf("An Error Has Occurred");
+		free_memory(b, c, p, curr_clusters, cluster_mean, data);
+		return 1;
+	}
 	for (i = 0; i < K; i++) {
 		cluster_mean[i] = b + i * (d + 1);
 	}
@@ -134,6 +164,11 @@ int main(int argc, char** argv) {
 	/*allocate temporary clusters to decide convergence*/
 	c = calloc(K * (d + 1), sizeof(double));
 	curr_clusters = calloc(K , sizeof(double*));
+	if (!c || !curr_clusters) {
+		printf("An Error Has Occurred");
+		free_memory(b, c, p, curr_clusters, cluster_mean, data);
+		return 1;
+	}
 	for (i = 0; i < K; i++) {
 		curr_clusters[i] = c + i * (d + 1);
 	}
@@ -205,12 +240,13 @@ int main(int argc, char** argv) {
 		}
 		printf("\n");
 	}
-	free(b);
+	free_memory(b, c, p, curr_clusters, cluster_mean, data);
+	/*free(b);
 	free(c);
 	free(p);
 	free(curr_clusters);
 	free(cluster_mean);
-	free(data);
+	free(data);*/
 
 	return 0;
 }
