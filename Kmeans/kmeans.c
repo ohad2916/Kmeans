@@ -199,7 +199,7 @@ int main(int argc, char** argv) {
 	{
 		for (j = 0; j < d; j++)
 		{
-			printf("%.4f ", cluster_mean[m][j]);
+			printf("%.4f", cluster_mean[m][j]);
 			if (j < d - 1)
 				printf(",");
 		}
