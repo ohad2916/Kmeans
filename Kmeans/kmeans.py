@@ -99,7 +99,7 @@ while curr_iter < iter_ and convergence > epsilon:
 
 # print(f"final iter: {curr_iter}")
 for cent in centroids:
-    print(*cent, sep=',')
+    print(','.join(f'{c:.4f}' for c in cent))
 
 
 
