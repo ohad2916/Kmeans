@@ -27,14 +27,13 @@ if iter_ > 999:
 
 points = []
 centroids = []
-centroids_sizes = [0 for i in range(k)]
 
 
-def closest_centroid(centroids, xi, dim):
+def closest_centroid(centroids_, xi_, dim):
     index_closest = 0
     min_dist = sys.float_info.max
-    for i in range(len(centroids)):
-        dist = euc_d(xi, centroids[i], dim)
+    for i in range(len(centroids_ )):
+        dist = euc_d(xi_ , centroids_[i], dim)
         if dist < min_dist:
             index_closest = i
             min_dist = dist
@@ -73,7 +72,6 @@ convergence = sys.float_info.max
 while curr_iter < iter_ and convergence > epsilon:
     addition_centroids = [[0 for i in range(dimension)] for j in range(k)]
     addition_centroids_sizes = [0 for i in range(k)]
-    old_centroids = [p.copy() for p in centroids]
 
     for i in range(len(points)):
         xi = points[i]
@@ -84,23 +82,25 @@ while curr_iter < iter_ and convergence > epsilon:
 
         addition_centroids_sizes[closest_c_index] += 1
 
-    # updating the centroids
+    # updating the copy centroids
     for n in range(k):
-        cluster_size = centroids_sizes[n] + addition_centroids_sizes[n]
         for m in range(dimension):
-            if cluster_size > 0:
-                centroids[n][m] = (centroids[n][m] * centroids_sizes[n] + addition_centroids[n][m]) / cluster_size
-        centroids_sizes[n] = cluster_size
+            if addition_centroids_sizes[n] > 0:
+                addition_centroids[n][m] = addition_centroids[n][m] / addition_centroids_sizes[n]
+            else:
+                addition_centroids[n][m] = 0.0
 
     # updating convergence val
     convergence = 0
     curr_Muk = 0
     for i in range(k):
-        curr_Muk = euc_d(centroids[i], old_centroids[i], dimension)
+        curr_Muk = euc_d(addition_centroids[i], centroids[i], dimension)
         if curr_Muk > convergence:
             convergence = curr_Muk
-
+    # updating real centroids
+    centroids = [p.copy() for p in addition_centroids]
     curr_iter += 1
+
 
 # print(f"final iter: {curr_iter}")
 for cent in centroids:
