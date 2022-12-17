@@ -51,8 +51,9 @@ int main(int argc, char** argv) {
 	data = NULL; p = NULL; b = NULL; c = NULL; cluster_mean = NULL; curr_clusters = NULL;
 
 	/*input validation*/
-	if (argc < 2) {
-		printf("Invalid number of cmd_line_Arguments: %d\nPlease run the program in the following format:\n$./kmeans {N} {ITER} <{input_data.txt}, ITER is optional!,Default value set to 200.\n", argc);
+	if (argc < 2 || argc > 4) {
+		/*printf("Invalid number of cmd_line_Arguments: %d\nPlease run the program in the following format:\n$./kmeans {N} {ITER} <{input_data.txt}, ITER is optional!,Default value set to 200.\n", argc);*/
+		printf("An Error Has Occurred");
 		return 1;
 	}
 	K = atoi(*(argv + 1)); /*validate later*/
@@ -64,7 +65,6 @@ int main(int argc, char** argv) {
 		printf("Invalid maximum iteration!");
 		return 1;
 	}
-
 	/*load file, calculate N, d. can be Optimized.*/
 	input_data = NULL;
 	size = 0;
@@ -90,6 +90,9 @@ int main(int argc, char** argv) {
 				input_data = temp_input_data;
 		}
 		N += (ch == '\n');
+	}
+	if (input_data[size-1] == '\n') {/*size is actually size()(*/
+		N--;
 	}
 	/*inputted K validation*/
 	if (K >= N) {
@@ -120,20 +123,24 @@ int main(int argc, char** argv) {
 	for (i = 0; i < N; i++) {
 		data[i] = p + i * d;
 	}
-	begin_ptr = &input_data[0];
-	end_ptr = &begin_ptr[0];
+	begin_ptr = input_data;
 	for (i = 0; i < N; i++)
 	{
 		for (j = 0; j < d; j++)
 		{
-			if (*end_ptr == '\0')
-				break;
-			else
-				begin_ptr = end_ptr + 1;
 			data[i][j] = strtod(begin_ptr, &end_ptr);
+			begin_ptr = end_ptr + 1;
+
 		}
 	}
 	free(input_data);
+	/*printing for debugging*/
+	/*for (i = 0; i < N; i++) {
+		for (j = 0; j < d; j++) {
+			printf("%f,", data[i][j]);
+		}
+		printf("\n");
+	}*/
 	/*end convert
 	initialize clusters*/
 	b = calloc(K * (d + 1), sizeof(double));
@@ -154,10 +161,6 @@ int main(int argc, char** argv) {
 			cluster_mean[i][j] = data[i][j];
 		}
 	}
-	/*for (i = 0; i < K; i++)
-	{
-		cluster_mean[i][d] = 1;
-	}*/
 	/*main algorithem*/
 	curr_X = data;
 	i = 0;
@@ -228,8 +231,6 @@ int main(int argc, char** argv) {
 
 		i++;
 	}
-
-
 	for (m = 0; m < K; m++)
 	{
 		for (j = 0; j < d; j++)

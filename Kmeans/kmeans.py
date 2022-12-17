@@ -1,4 +1,5 @@
 import sys
+import math
 
 try:
     # total arguments
@@ -42,24 +43,28 @@ def closest_centroid(centroids, xi, dim):
 
 
 def euc_d(p1, p2, dim):
-    sum_ = 0
-    for i in range(dimension):
+    sum_ = 0.0
+    for i in range(dim):
         sum_ += (p1[i]-p2[i])**2
 
-    return sum_ ** 0.5
+    return math.sqrt(sum_)
 
 
 with open(input_data_name) as file:
     for line in file:
         points_in_line = [float(x) for x in line.split(",")]
         points.append(points_in_line)
-
+#debugging
+    # for point in points:
+    #     print(*point)
 if k <= 0 or k >= len(points):
     print("Invalid number of clusters!")
     sys.exit()
 
 dimension = len(points[0])
-centroids = points[:k]
+centroids = []
+for i in range(k):
+    centroids.append(points[i].copy())
 old_centroids = []
 
 curr_iter = 0
