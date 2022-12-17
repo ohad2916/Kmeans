@@ -51,9 +51,9 @@ int main(int argc, char** argv) {
 	data = NULL; p = NULL; b = NULL; c = NULL; cluster_mean = NULL; curr_clusters = NULL;
 
 	/*input validation*/
-	if (argc < 2 || argc > 4) {
+	if (argc < 2 || argc > 3) {
 		/*printf("Invalid number of cmd_line_Arguments: %d\nPlease run the program in the following format:\n$./kmeans {N} {ITER} <{input_data.txt}, ITER is optional!,Default value set to 200.\n", argc);*/
-		printf("An Error Has Occurred");
+		printf("An Error Has Occurred\n");
 		return 1;
 	}
 	K = atoi(*(argv + 1)); /*validate later*/
@@ -62,7 +62,7 @@ int main(int argc, char** argv) {
 	else
 		iter = DEFAULT_ITER;
 	if (iter >= 1000) {
-		printf("Invalid maximum iteration!");
+		printf("Invalid maximum iteration!\n");
 		return 1;
 	}
 	/*load file, calculate N, d. can be Optimized.*/
@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
 	capacity = 100;
 	input_data = calloc(capacity + 1,sizeof(char));
 	if (!input_data){
-		printf("An Error Has Occurred");
+		printf("An Error Has Occurred\n");
 		free_memory(b, c, p, curr_clusters, cluster_mean, data);
 		return 1;
 	}
@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
 			capacity += 100;
 			temp_input_data = realloc(input_data, sizeof(char) * capacity + 1);
 			if (!temp_input_data) {
-				printf("An Error Has Occurred");
+				printf("An Error Has Occurred\n");
 				free_memory(b, c, p, curr_clusters, cluster_mean, data);
 				return 1;
 			}
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 	}
 	/*inputted K validation*/
 	if (K >= N) {
-		printf("Invalid number of clusters!");
+		printf("Invalid number of clusters!\n");
 		return 1;
 	}
 	input_data[size] = '\0';
@@ -109,14 +109,14 @@ int main(int argc, char** argv) {
 	data = NULL;
 	data = calloc( N,sizeof(double*));
 	if (!data) {
-		printf("An Error Has Occurred");
+		printf("An Error Has Occurred\n");
 		free_memory(b, c, p, curr_clusters, cluster_mean, data);
 		return 1;
 	}
 	p = NULL;
 	p = (double*)calloc(N * d, sizeof(double));
 	if (!p){
-		printf("An Error Has Occurred");
+		printf("An Error Has Occurred\n");
 		free_memory(b, c, p, curr_clusters, cluster_mean, data);
 		return 1;
 	}
@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
 	b = calloc(K * (d + 1), sizeof(double));
 	cluster_mean = calloc(K , sizeof(double*));
 	if (!b || !cluster_mean){
-		printf("An Error Has Occurred");
+		printf("An Error Has Occurred\n");
 		free_memory(b, c, p, curr_clusters, cluster_mean, data);
 		return 1;
 	}
@@ -168,7 +168,7 @@ int main(int argc, char** argv) {
 	c = calloc(K * (d + 1), sizeof(double));
 	curr_clusters = calloc(K , sizeof(double*));
 	if (!c || !curr_clusters) {
-		printf("An Error Has Occurred");
+		printf("An Error Has Occurred\n");
 		free_memory(b, c, p, curr_clusters, cluster_mean, data);
 		return 1;
 	}
@@ -225,7 +225,7 @@ int main(int argc, char** argv) {
 		}
 		if (max_Duk <= Convergence_VALUE) {
 			/*print statement for debugging*/
-			/*printf("Converged after: %d iterations\n", i +1);*/
+			/*printf("Converged after: %d iterations\n", (int)i + 1);*/
 			break;
 		}
 
