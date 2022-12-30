@@ -4,33 +4,36 @@ import sys
 import math
 
 #try:
-#    # total arguments
+#    #total arguments
 #    arg_c = len(sys.argv)
-#
+#    print(sys.argv)
 #    k = int(sys.argv[1])
-#    iter_ = 200
-#    epsilon = 0.001
-#    input_data_name = sys.argv[-1]
+#    iter_ = 300
+#    epsilon = int(sys.argv[2])
+#    file_name_1 = sys.argv[-2]
+#    file_name_2 = sys.argv[-1]
 #
-#    if arg_c == 4:
+#    if arg_c == 6:
 #        iter_ = int(sys.argv[2])
+#        epsilon = int(sys.argv[3])
+#
 #except:
 #    print("An error has Occurred")
 #    sys.exit()
-#
-#
+
+
 #if arg_c > 4 or arg_c < 2:
 #    print("An Error has Occurred")
 #    sys.exit()
-#
+
 #if iter_ > 999:
 #    print("Invalid maximum iteration!")
 #    sys.exit()
 
 
 
-file_name_1 = r"C:\Users\Elad\Desktop\work\סמסטר א\פרויקט תוכנה\tests\input_2_db_1.txt"
-file_name_2 = r"C:\Users\Elad\Desktop\work\סמסטר א\פרויקט תוכנה\tests\input_2_db_2.txt"
+file_name_1 = r"C:\Users\Elad\Documents\GitHub\Kmeans\Kmeans\input_2_db_1.txt"
+file_name_2 = r"C:\Users\Elad\Documents\GitHub\Kmeans\Kmeans\input_2_db_1.txt"
 
 k = 7
 iter_ = 300
